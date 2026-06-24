@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>年上メンタリング道場｜うさうさ研修工房</title>
+<style>
+  :root{
+    --rose-ink:#46202f; --rose:#b14e6b; --rose-bright:#d4849b;
+    --rose-mist:#f7e8ee; --rose-line:#ecccd6; --cream:#fdf8f5;
+    --ink-soft:#7a6068; --sage:#4f7a64; --sage-mist:#e7f0ea;
+    --clay:#b9683c; --clay-mist:#f6e7dc; --gold:#b8923a;
+    --shadow:0 8px 28px rgba(70,32,47,.10);
+    --serif:"Hiragino Mincho ProN","Yu Mincho",YuMincho,"Noto Serif JP",Georgia,serif;
+    --sans:"Hiragino Sans","Yu Gothic",YuGothic,"Noto Sans JP",-apple-system,sans-serif;
+    --mono:"SFMono-Regular",Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:var(--cream);color:var(--rose-ink);font-family:var(--sans);line-height:1.8;font-size:16px;-webkit-font-smoothing:antialiased;}
+  .wrap{max-width:880px;margin:0 auto;padding:0 20px;}
+
+  header.hero{background:radial-gradient(120% 90% at 85% -10%, var(--rose-mist) 0%, transparent 60%),var(--cream);border-bottom:1px solid var(--rose-line);padding:38px 0 26px;}
+  .eyebrow{font-size:12.5px;letter-spacing:.16em;color:var(--rose);font-weight:700;display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
+  .eyebrow .truth{color:var(--sage);border:1px solid var(--sage);border-radius:99px;padding:2px 10px;font-size:11px;letter-spacing:.06em;}
+  .hero-grid{display:flex;gap:22px;align-items:flex-end;margin-top:14px;}
+  .hero-copy{flex:1;min-width:0;}
+  h1.title{font-family:var(--serif);font-weight:600;line-height:1.16;font-size:clamp(32px,6.5vw,50px);margin:.1em 0 .25em;}
+  h1.title .dot{color:var(--rose);}
+  .lead{font-size:15.5px;max-width:48ch;margin:0;}
+  .chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px;}
+  .chip{font-size:12px;background:#fff;border:1px solid var(--rose-line);color:var(--ink-soft);border-radius:99px;padding:4px 11px;}
+  .rabbit{width:104px;height:104px;flex:none;filter:drop-shadow(0 6px 10px rgba(177,78,107,.18));}
+
+  nav.tabs{position:sticky;top:0;z-index:20;background:rgba(253,248,245,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--rose-line);}
+  .tabs-inner{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;}
+  .tabs-inner::-webkit-scrollbar{display:none;}
+  .tab{flex:none;border:none;background:none;cursor:pointer;font-family:var(--sans);font-size:14px;font-weight:600;color:var(--ink-soft);padding:14px 14px 11px;border-bottom:3px solid transparent;white-space:nowrap;transition:.15s;}
+  .tab:hover{color:var(--rose);}
+  .tab[aria-selected="true"]{color:var(--rose-ink);border-bottom-color:var(--rose);}
+  .tab .n{font-family:var(--mono);font-size:11px;color:var(--rose);margin-right:5px;}
+
+  main{padding:34px 0 80px;}
+  .panel{display:none;animation:fade .35s ease;}
+  .panel.on{display:block;}
+  @keyframes fade{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
+  h2.sec{font-family:var(--serif);font-weight:600;font-size:27px;line-height:1.3;margin:0 0 6px;}
+  .sec-sub{color:var(--ink-soft);font-size:14.5px;margin:0 0 22px;}
+  h3{font-size:17px;margin:28px 0 8px;display:flex;align-items:center;gap:8px;}
+  h3::before{content:"";width:8px;height:8px;border-radius:2px;background:var(--rose);transform:rotate(45deg);}
+  p{margin:0 0 14px;}
+  em.q{font-style:normal;color:var(--rose);font-weight:600;}
+
+  /* grounding badge */
+  .src-badge{display:inline-block;font-size:11px;font-weight:700;color:var(--sage);background:var(--sage-mist);border-radius:6px;padding:2px 8px;margin:2px 4px 2px 0;white-space:nowrap;}
+  .src-badge.book{color:var(--gold);background:#f5edd9;}
+
+  /* WHY 4-layer */
+  .four{border:1px solid var(--rose-line);border-radius:16px;overflow:hidden;background:#fff;box-shadow:var(--shadow);}
+  .four .row{display:flex;border-top:1px solid var(--rose-line);}
+  .four .row:first-child{border-top:none;}
+  .four .lab{flex:none;width:108px;background:var(--rose-mist);color:var(--rose);font-weight:700;font-size:13px;padding:15px 14px;display:flex;align-items:center;}
+  .four .val{padding:15px 16px;font-size:15px;}
+  .four .val.ram{background:var(--rose-mist);}
+  .four .val.one{font-family:var(--serif);font-size:18px;}
+
+  /* phrase library */
+  .pfilter{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0 18px;}
+  .pf{font-family:var(--sans);font-size:13px;font-weight:600;cursor:pointer;border:1px solid var(--rose-line);background:#fff;color:var(--ink-soft);border-radius:99px;padding:7px 14px;transition:.15s;}
+  .pf:hover{border-color:var(--rose);color:var(--rose);}
+  .pf.on{background:var(--rose);color:#fff;border-color:var(--rose);}
+  .pcard{background:#fff;border:1px solid var(--rose-line);border-radius:14px;padding:15px 16px;margin:11px 0;}
+  .pcard .ptop{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;}
+  .pcard .ptag{font-size:11px;color:var(--rose);font-weight:700;letter-spacing:.04em;}
+  .pcard .ptext{font-size:16.5px;font-family:var(--serif);margin:5px 0 9px;line-height:1.5;}
+  .pcard .pwhy{font-size:13px;color:var(--ink-soft);border-top:1px dashed var(--rose-line);padding-top:9px;}
+  .copy{flex:none;border:1px solid var(--rose-line);background:var(--rose-mist);color:var(--rose);font-size:12px;font-weight:700;border-radius:8px;padding:7px 11px;cursor:pointer;transition:.15s;}
+  .copy:hover{background:var(--rose);color:#fff;}
+  .copy.done{background:var(--sage);color:#fff;border-color:var(--sage);}
+
+  /* practice quiz */
+  .qmeta{display:flex;justify-content:space-between;align-items:center;background:var(--rose-mist);border-radius:12px;padding:10px 16px;margin-bottom:16px;font-size:14px;}
+  .qmeta b{font-family:var(--mono);color:var(--rose);font-size:16px;}
+  .qcard{background:#fff;border:1px solid var(--rose-line);border-radius:16px;box-shadow:var(--shadow);padding:20px;margin:16px 0;}
+  .qscene{font-size:15.5px;margin-bottom:6px;}
+  .qscene .qn{font-family:var(--mono);color:var(--rose);font-weight:700;margin-right:8px;}
+  .qopts{margin-top:12px;display:flex;flex-direction:column;gap:9px;}
+  .qopt{text-align:left;font-family:var(--sans);font-size:15px;cursor:pointer;border:1.5px solid var(--rose-line);background:#fff;color:var(--rose-ink);border-radius:11px;padding:12px 14px;transition:.15s;line-height:1.6;}
+  .qopt:hover:not(:disabled){border-color:var(--rose);background:var(--rose-mist);}
+  .qopt:disabled{cursor:default;}
+  .qopt.correct{border-color:var(--sage);background:var(--sage-mist);}
+  .qopt.wrong{border-color:var(--clay);background:var(--clay-mist);}
+  .qopt .mk{font-weight:700;margin-right:8px;}
+  .qexp{display:none;margin-top:14px;border-left:3px solid var(--sage);background:var(--sage-mist);border-radius:0 10px 10px 0;padding:13px 16px;font-size:14px;}
+  .qexp.on{display:block;}
+  .qexp .h{font-weight:700;color:var(--sage);margin-bottom:5px;}
+  .btn{font-family:var(--sans);font-weight:700;font-size:14px;cursor:pointer;border:none;border-radius:99px;padding:11px 22px;background:var(--rose);color:#fff;transition:.15s;}
+  .btn:hover{background:var(--rose-bright);}
+  .qresult{display:none;text-align:center;background:#fff;border:1px solid var(--rose-line);border-radius:16px;box-shadow:var(--shadow);padding:28px;margin-top:18px;}
+  .qresult.on{display:block;}
+  .qresult .big{font-family:var(--serif);font-size:48px;color:var(--rose);}
+
+  /* facilitation silence chip */
+  .ma{display:flex;gap:16px;align-items:center;background:linear-gradient(135deg,#fff,var(--rose-mist));border:1px solid var(--rose-line);border-radius:16px;padding:16px 18px;margin:16px 0;}
+  .ma-ring{position:relative;width:64px;height:64px;flex:none;}
+  .ma-ring svg{transform:rotate(-90deg);}
+  .ma-ring .num{position:absolute;inset:0;display:grid;place-items:center;font-family:var(--serif);font-size:24px;}
+  .ma-txt{flex:1;font-size:13.5px;color:var(--ink-soft);}
+  .ma-txt b{color:var(--rose-ink);font-size:14.5px;}
+
+  /* sources */
+  .refgroup{font-weight:700;color:var(--rose);font-size:13px;letter-spacing:.05em;margin:22px 0 8px;}
+  .ref{border:1px solid var(--rose-line);border-radius:12px;background:#fff;padding:14px 16px;margin:10px 0;font-size:13.5px;}
+  .ref .badge{font-size:10.5px;font-weight:700;border-radius:99px;padding:2px 9px;margin-right:8px;}
+  .ref .pr{background:var(--sage-mist);color:var(--sage);}
+  .ref .bk{background:#f5edd9;color:var(--gold);}
+  .ref .meta{color:var(--ink-soft);font-size:12px;font-family:var(--mono);margin-top:4px;word-break:break-all;}
+  .note{background:var(--rose-mist);border-radius:12px;padding:14px 16px;font-size:13.5px;margin:20px 0;}
+
+  footer{border-top:1px solid var(--rose-line);padding:24px 0 40px;color:var(--ink-soft);font-size:12.5px;text-align:center;}
+  footer .heart{color:var(--rose);}
+
+  @media(max-width:560px){.four .lab{width:84px;font-size:12px;}.rabbit{width:84px;height:84px;}}
+  @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important;}}
+  :focus-visible{outline:2.5px solid var(--rose);outline-offset:2px;border-radius:4px;}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">うさうさ研修工房 ／ 年上メンタリング道場 <span class="truth">国内・海外の査読論文ベース／嘘つかない原則</span></div>
+    <div class="hero-grid">
+      <div class="hero-copy">
+        <h1 class="title">年上を、ハッピーに<span class="dot">。</span></h1>
+        <p class="lead">年下のあなたが、年上でハイスキルな相手をメンタリングする。武器は「聞く」「問いかける」「面白い視点を足す」——全フレーズに査読論文の裏付けつき。</p>
+        <div class="chips">
+          <span class="chip">v2.0</span>
+          <span class="chip">フレーズ集（根拠つき）</span>
+          <span class="chip">実践問題で練習</span>
+          <span class="chip">オフライン動作</span>
+        </div>
+      </div>
+      <svg class="rabbit" viewBox="0 0 120 120" aria-hidden="true">
+        <ellipse cx="60" cy="104" rx="30" ry="6" fill="#ecccd6"/>
+        <path d="M44 40 Q40 12 50 14 Q58 16 56 42 Z" fill="#fff" stroke="#b14e6b" stroke-width="2.5"/>
+        <path d="M76 40 Q80 12 70 14 Q62 16 64 42 Z" fill="#fff" stroke="#b14e6b" stroke-width="2.5"/>
+        <path d="M48 26 Q46 18 50 18 Q53 20 52 28 Z" fill="#f7e8ee"/>
+        <path d="M72 26 Q74 18 70 18 Q67 20 68 28 Z" fill="#f7e8ee"/>
+        <circle cx="60" cy="64" r="30" fill="#fff" stroke="#b14e6b" stroke-width="2.5"/>
+        <circle cx="50" cy="60" r="3.4" fill="#46202f"/>
+        <circle cx="70" cy="60" r="3.4" fill="#46202f"/>
+        <path d="M57 70 Q60 73 63 70" fill="none" stroke="#46202f" stroke-width="2.2" stroke-linecap="round"/>
+        <circle cx="44" cy="68" r="4.5" fill="#f3b6c6" opacity=".7"/>
+        <circle cx="76" cy="68" r="4.5" fill="#f3b6c6" opacity=".7"/>
+        <rect x="84" y="46" width="6" height="34" rx="3" transform="rotate(28 87 63)" fill="#b9683c"/>
+        <path d="M96 84 q6 6 1 11 q-7-2-6-8 Z" fill="#b14e6b"/>
+      </svg>
+    </div>
+  </div>
+</header>
+
+<nav class="tabs" aria-label="セクション">
+  <div class="wrap">
+    <div class="tabs-inner" role="tablist">
+      <button class="tab" role="tab" aria-selected="true" data-p="why"><span class="n">00</span>なぜ成り立つか</button>
+      <button class="tab" role="tab" aria-selected="false" data-p="phrase"><span class="n">01</span>フレーズ集</button>
+      <button class="tab" role="tab" aria-selected="false" data-p="prac"><span class="n">02</span>実践問題</button>
+      <button class="tab" role="tab" aria-selected="false" data-p="src"><span class="n">03</span>出典（査読論文）</button>
+    </div>
+  </div>
+</nav>
+
+<main>
+  <div class="wrap">
+
+    <!-- 00 WHY -->
+    <section class="panel on" id="why" role="tabpanel">
+      <h2 class="sec">年下が年上を導く。それは "逆メンタリング" という研究領域。</h2>
+      <p class="sec-sub">年下のメンターが、年上・上位のメンティに、新しい専門性や視点を渡す関係。鍵は相互尊重と互恵性で、双方が利益を得る。<span class="src-badge">Murphy 2012</span></p>
+
+      <div class="four">
+        <div class="row"><div class="lab">定義</div><div class="val">あなたの役割は「教える」ではなく、<strong>聞く・問う・面白い視点を足す・場を回す</strong>こと。相手の暗黙知を引き出し、本人に再発見してもらう伴走。</div></div>
+        <div class="row"><div class="lab">たとえ🍜</div><div class="val ram">自分より腕のいい職人に味見して指図しても無意味。やるのは「今日はどんな一杯にしたい?」と聞き、3秒黙り、「その火加減、なぜそう?」と返すこと。職人は手元を言葉にしながら、もう一段うまくなる。</div></div>
+        <div class="row"><div class="lab">詳細</div><div class="val">良質な傾聴は、話し手の自己洞察・態度の明確さ・自律性を高める。<span class="src-badge">Kluger &amp; Itzchakov 2022</span><span class="src-badge">Itzchakov et al. 2018</span>　質問（とくに追加質問）は「ちゃんと向き合ってくれている」という応答性を伝え、相手の好感と安心を生む。<span class="src-badge">Huang et al. 2017</span></div></div>
+        <div class="row"><div class="lab">一言</div><div class="val one">あなたが問い、黙るほど、年上の専門家は気持ちよく考える。</div></div>
+      </div>
+
+      <h3>「年上をハッピーに」の正体</h3>
+      <p>相手を立てて従うことではありません。<strong>良い問いと良い傾聴は、相手の有能感・自律性・つながりを満たす</strong>——これがやる気と満足の源です。<span class="src-badge">Ryan &amp; Deci 2000</span>　褒めるときは能力でなく<em class="q">プロセス</em>を。能力称賛は失敗後の粘りを下げ、格上には空虚に響きます。<span class="src-badge">Mueller &amp; Dweck 1998</span></p>
+    </section>
+
+    <!-- 01 PHRASE -->
+    <section class="panel" id="phrase" role="tabpanel">
+      <h2 class="sec">根拠つきフレーズ集</h2>
+      <p class="sec-sub">そのまま1on1や会議に持ち込めます。各フレーズの下に、なぜ効くのか＝査読論文の根拠つき。タップでコピー。</p>
+      <div class="pfilter" id="pfilter"></div>
+      <div id="plist"></div>
+
+      <div class="ma">
+        <div class="ma-ring">
+          <svg width="64" height="64" viewBox="0 0 64 64">
+            <circle cx="32" cy="32" r="27" fill="none" stroke="#f7e8ee" stroke-width="7"/>
+            <circle id="maArc" cx="32" cy="32" r="27" fill="none" stroke="#b14e6b" stroke-width="7" stroke-linecap="round" stroke-dasharray="169.6" stroke-dashoffset="0"/>
+          </svg>
+          <div class="num" id="maNum">3</div>
+        </div>
+        <div class="ma-txt">
+          <b>間（ま）の3秒</b>　問いを投げたら、押して黙って待つ。沈黙は相手が考える時間。ファシリテーションの基本動作です。<br>
+          <button class="btn" id="maBtn" style="margin-top:8px;padding:8px 16px;">3秒、黙る</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 02 PRACTICE -->
+    <section class="panel" id="prac" role="tabpanel">
+      <h2 class="sec">実践問題で練習する</h2>
+      <p class="sec-sub">場面を読んで、最善の一手を選んでください。答え合わせで「なぜそれが効くか」を査読論文つきで解説します。</p>
+      <div class="qmeta"><span>正解数 <b id="qScore">0</b> / <span id="qTotal">0</span></span><button class="btn" id="qReset" style="padding:7px 16px;font-size:13px;">最初から</button></div>
+      <div id="quizList"></div>
+      <div class="qresult" id="qResult">
+        <div class="big" id="qBig">0/0</div>
+        <p id="qMsg" style="margin:8px 0 0;"></p>
+      </div>
+    </section>
+
+    <!-- 03 SOURCES -->
+    <section class="panel" id="src" role="tabpanel">
+      <h2 class="sec">出典（査読論文・国内/海外）</h2>
+      <p class="sec-sub">嘘つかない原則：本ツール作成時に掲載誌・DOIまで実在確認した文献です。<span class="badge pr" style="font-size:10.5px;padding:2px 9px;border-radius:99px;background:var(--sage-mist);color:var(--sage);font-weight:700;">査読</span>＝peer-reviewed論文。<span class="badge bk" style="font-size:10.5px;padding:2px 9px;border-radius:99px;background:#f5edd9;color:var(--gold);font-weight:700;">書籍</span>＝実証研究に基づく書籍（厳密な査読論文ではないため補助的に使用）。</p>
+
+      <div class="refgroup">── 海外 ──</div>
+
+      <div class="ref"><span class="badge pr">査読</span><strong>Murphy, W. M. (2012). Reverse mentoring at work: Fostering cross-generational learning and developing millennial leaders.</strong> <em>Human Resource Management, 51</em>(4), 549–573.<div class="meta">doi:10.1002/hrm.21489　年下メンター×年上メンティ。互恵と相互尊重が前提。</div></div>
+
+      <div class="ref"><span class="badge pr">査読</span><strong>Kluger, A. N., &amp; Itzchakov, G. (2022). The Power of Listening at Work.</strong> <em>Annual Review of Organizational Psychology and Organizational Behavior, 9</em>, 121–146.<div class="meta">doi:10.1146/annurev-orgpsych-012420-091013　良質な傾聴の職場効果を統合レビュー。</div></div>
+
+      <div class="ref"><span class="badge pr">査読</span><strong>Itzchakov, G., DeMarree, K. G., Kluger, A. N., &amp; Turjeman-Levi, Y. (2018). The Listener Sets the Tone: High-Quality Listening Increases Attitude Clarity and Behavior-Intention Consequences.</strong> <em>Personality and Social Psychology Bulletin, 44</em>(5), 762–778.<div class="meta">doi:10.1177/0146167217747874　傾聴が話し手の態度の明確さを高める。</div></div>
+
+      <div class="ref"><span class="badge pr">査読</span><strong>Itzchakov, G., &amp; Kluger, A. N. (2017). Can holding a stick improve listening at work? The effect of Listening Circles on employees' emotions and cognitions.</strong> <em>European Journal of Work and Organizational Psychology, 26</em>(5), 663–676.<div class="meta">doi:10.1080/1359432X.2017.1351429</div></div>
+
+      <div class="ref"><span class="badge pr">査読</span><strong>Huang, K., Yeomans, M., Brooks, A. W., Minson, J., &amp; Gino, F. (2017). It Doesn't Hurt to Ask: Question-Asking Increases Liking.</strong> <em>Journal of Personality and Social Psychology, 113</em>(3), 430–452.<div class="meta">doi:10.1037/pspi0000097　質問（特に追加質問）が応答性と好感を高める。※Study3の統計に議論あり。追加質問の効果が頑健。</div></div>
+
+      <div class="ref"><span class="badge pr">査読</span><strong>Ryan, R. M., &amp; Deci, E. L. (2000). Self-Determination Theory and the Facilitation of Intrinsic Motivation, Social Development, and Well-Being.</strong> <em>American Psychologist, 55</em>(1), 68–78.<div class="meta">doi:10.1037/0003-066X.55.1.68　自律性・有能感・関係性。</div></div>
+
+      <div class="ref"><span class="badge pr">査読</span><strong>Mueller, C. M., &amp; Dweck, C. S. (1998). Praise for Intelligence Can Undermine Children's Motivation and Performance.</strong> <em>Journal of Personality and Social Psychology, 75</em>(1), 33–52.<div class="meta">doi:10.1037/0022-3514.75.1.33　プロセス称賛＞能力称賛。効果量に再現性議論あり。</div></div>
+
+      <div class="ref"><span class="badge pr">査読</span><strong>Camerer, C., Loewenstein, G., &amp; Weber, M. (1989). The Curse of Knowledge in Economic Settings.</strong> <em>Journal of Political Economy, 97</em>(5), 1232–1254.<div class="meta">doi:10.1086/261651　熟達者は暗黙知を言語化しにくい。</div></div>
+
+      <div class="refgroup">── 国内 ──</div>
+
+      <div class="ref"><span class="badge pr">査読</span><strong>藤本邦男 (2021). 自発的なメンタリング行動の規定要因の実証研究──メンターの心理特性と成果給に注目して.</strong> 日本労務学会誌, 22(1), 35–53.<div class="meta">doi:10.24592/jshrm.22.1_35　メンターの心理的エンパワーメントがメンタリングを促進。</div></div>
+
+      <div class="ref"><span class="badge pr">査読</span><strong>『科学技術コミュニケーション』(JJSC).</strong> 北海道大学 CoSTEP, 2007–（査読付オープンアクセス）.<div class="meta">サイエンスコミュニケーションの国内査読誌（HUSCAPで全文公開）。</div></div>
+
+      <div class="ref"><span class="badge bk">書籍</span><strong>松尾睦 (2006).『経験からの学習──プロフェッショナルへの成長プロセス』</strong> 同文舘出版／(2011)『「経験学習」入門』ダイヤモンド社.<div class="meta">ストレッチ・リフレクション・エンジョイメント。「楽しむ＝面白さ・やりがい」が学びを駆動。</div></div>
+
+      <div class="ref"><span class="badge bk">書籍</span><strong>Schein, E. H. (2013). <em>Humble Inquiry.</em></strong> Berrett-Koehler ／ 中原淳 (2010)『職場学習論』東京大学出版会.<div class="meta">問い中心の関わり（humble inquiry）／業務・内省・精神の三支援。補助的に使用。</div></div>
+
+      <div class="note">この道具は対話の補助輪です。AIや道具に頼り切らず、最終的には目の前の相手との生の対話で磨いてください。引用時は各DOIで原典を確認することをおすすめします。</div>
+    </section>
+
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">うさうさ研修工房 ／ 年上メンタリング道場 v2.0　—　国内・海外の査読論文ベース・オフライン動作・通信なし<br>
+  面白きこともなき世を面白く　<span class="heart">🐰🎨</span></div>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+
+  /* tabs */
+  var tabs=[].slice.call(document.querySelectorAll('.tab')), panels={};
+  document.querySelectorAll('.panel').forEach(function(p){panels[p.id]=p;});
+  function show(id){
+    tabs.forEach(function(t){t.setAttribute('aria-selected',t.dataset.p===id?'true':'false');});
+    Object.keys(panels).forEach(function(k){panels[k].classList.toggle('on',k===id);});
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+  tabs.forEach(function(t){t.addEventListener('click',function(){show(t.dataset.p);});});
+
+  /* clipboard */
+  function copyText(txt,btn){
+    var done=function(){btn.textContent='✓';btn.classList.add('done');setTimeout(function(){btn.textContent='コピー';btn.classList.remove('done');},1200);};
+    if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(done).catch(function(){fb(txt);done();});}
+    else{fb(txt);done();}
+  }
+  function fb(txt){var ta=document.createElement('textarea');ta.value=txt;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();try{document.execCommand('copy');}catch(e){}document.body.removeChild(ta);}
+
+  /* phrase library */
+  var P=[
+    {cat:'関係をひらく', t:'◯◯さんの経験から、ぜひ教わりたいことがあって。', why:'相手の知をこちらが必要としていると示すと関係が築かれる。逆メンタリングは互恵が前提。', src:'Murphy 2012'},
+    {cat:'関係をひらく', t:'この領域では私が新人なので、見えていない穴があれば率直に指摘してください。', why:'弱みを開く（here-and-now humility）と対等な対話が始まる。', src:'Schein 2013'},
+    {cat:'関係をひらく', t:'今日は私が聞き役にまわります。', why:'良質な傾聴は相手の自律性と心理的安全を支える。', src:'Kluger & Itzchakov 2022'},
+
+    {cat:'考えさせる問い', t:'◯◯さんは、これをどう見ていますか?', why:'答えを知らない問いが相手の思考を引き出す。', src:'Schein 2013'},
+    {cat:'考えさせる問い', t:'その判断の決め手は、何でしたか?', why:'追加質問は応答性を伝え、相手の好感と安心を高める。', src:'Huang et al. 2017'},
+    {cat:'考えさせる問い', t:'もう少し、聞かせてください。', why:'フォローアップの一言が「ちゃんと向き合っている」という信号になる。', src:'Huang et al. 2017'},
+    {cat:'考えさせる問い', t:'いま一番引っかかっているのは、どこですか?', why:'論点を相手自身に特定させると内省が進む。', src:'Itzchakov et al. 2018'},
+
+    {cat:'面白い視点を足す', t:'もしこれを新人に説明するなら、どう言いますか?', why:'熟達者は暗黙知を言語化しにくい。「新人に説明するなら」が言語化を促し、本人の理解も深まる。', src:'Camerer et al. 1989'},
+    {cat:'面白い視点を足す', t:'10年後に振り返ったら、この判断はどう見えそうですか?', why:'時間軸をずらす問いが、視野を広げ態度を明確化する。', src:'Itzchakov et al. 2018'},
+    {cat:'面白い視点を足す', t:'あえて逆張りすると、どんな筋がありますか?', why:'反対の立場を一度とると思考が複雑化し、決めつけが減る。', src:'Itzchakov et al. 2018'},
+    {cat:'面白い視点を足す', t:'もし制約がゼロなら、何を試しますか?', why:'制約を外す問いが内発的な探索意欲（自律性）を刺激する。', src:'Ryan & Deci 2000'},
+
+    {cat:'聞く・承認する', t:'つまり、◯◯が肝で、△△を試したい、ということですね。', why:'要約して返す（鏡）と、話し手の自己洞察と記憶が豊かになる。', src:'Kluger & Itzchakov 2022'},
+    {cat:'聞く・承認する', t:'その段取りの工夫、どうやって思いついたんですか?', why:'プロセスを問う形で承認する。能力称賛より動機を保つ。', src:'Mueller & Dweck 1998'},
+
+    {cat:'やる気・自律', t:'最終的には◯◯さんが決めてください。私は壁打ち役です。', why:'決定権を相手に渡すと自律性が満たされ、やる気が湧く。', src:'Ryan & Deci 2000'},
+    {cat:'やる気・自律', t:'どの案に、いちばん惹かれていますか?', why:'選好を言語化させ、本人の意志に沿って後押しする。', src:'Ryan & Deci 2000'},
+    {cat:'やる気・自律', t:'先週から、どこが進みましたか?', why:'本人が自分の前進に気づくと有能感が満たされる。', src:'松尾 2006/2011'},
+
+    {cat:'ファシリテーション', t:'いったん論点を3つに整理すると……', why:'場の認知負荷を下げ、議論を前に進める足場をつくる。', src:'Schein 2013'},
+    {cat:'ファシリテーション', t:'時間を半分使いました。残りで何を決めましょう?', why:'時間の自覚を共有し、相手に主導権を渡したまま収束させる。', src:'Ryan & Deci 2000'},
+    {cat:'ファシリテーション', t:'いまの沈黙、考えている時間ですよね。待ちます。', why:'沈黙を肯定的に扱うと、相手は安心して思考を続けられる。', src:'Kluger & Itzchakov 2022'},
+    {cat:'ファシリテーション', t:'反対意見も歓迎です。むしろ穴を教えてください。', why:'異論を歓迎する姿勢が心理的安全をつくり、率直な発話を引き出す。', src:'Itzchakov et al. 2018'}
+  ];
+  var cats=['すべて'];P.forEach(function(p){if(cats.indexOf(p.cat)<0)cats.push(p.cat);});
+  var pfilter=document.getElementById('pfilter'),plist=document.getElementById('plist'),activeCat='すべて';
+  function renderPF(){pfilter.innerHTML='';cats.forEach(function(c){var b=document.createElement('button');b.className='pf'+(c===activeCat?' on':'');b.textContent=c;b.addEventListener('click',function(){activeCat=c;renderPF();renderP();});pfilter.appendChild(b);});}
+  function renderP(){
+    plist.innerHTML='';
+    P.filter(function(p){return activeCat==='すべて'||p.cat===activeCat;}).forEach(function(p){
+      var card=document.createElement('div');card.className='pcard';
+      var top=document.createElement('div');top.className='ptop';
+      var left=document.createElement('div');
+      left.innerHTML='<span class="ptag">'+p.cat+'</span><div class="ptext">'+p.t+'</div>';
+      var btn=document.createElement('button');btn.className='copy';btn.textContent='コピー';
+      btn.addEventListener('click',function(){copyText(p.t,btn);});
+      top.appendChild(left);top.appendChild(btn);
+      var why=document.createElement('div');why.className='pwhy';
+      why.innerHTML='なぜ効く: '+p.why+' <span class="src-badge">'+p.src+'</span>';
+      card.appendChild(top);card.appendChild(why);plist.appendChild(card);
+    });
+  }
+  renderPF();renderP();
+
+  /* silence timer */
+  var maBtn=document.getElementById('maBtn'),maNum=document.getElementById('maNum'),maArc=document.getElementById('maArc'),CIRC=169.6,maTimer=null;
+  maBtn.addEventListener('click',function(){
+    if(maTimer)return;
+    maBtn.disabled=true;maBtn.textContent='…待つ…';var start=Date.now();
+    maTimer=setInterval(function(){
+      var el=(Date.now()-start)/1000;
+      maArc.style.strokeDashoffset=(Math.min(el,3)/3*CIRC).toFixed(1);
+      var s=Math.ceil(3-el);maNum.textContent=s>0?s:'✓';
+      if(el>=3){clearInterval(maTimer);maTimer=null;maNum.textContent='✓';maBtn.disabled=false;maBtn.textContent='もう一度';
+        setTimeout(function(){if(!maTimer){maNum.textContent='3';maArc.style.strokeDashoffset='0';}},1300);}
+    },50);
+  });
+
+  /* practice quiz */
+  var Q=[
+    {s:'62歳のベテランPMが、新ツール導入に懐疑的。年下のあなたはどう切り出す?',
+     o:[{t:'このツールは効率的なので、導入すべきです。',ok:false},
+        {t:'◯◯さんが懸念されているのは、どのあたりですか?',ok:true},
+        {t:'もうみんな使ってるので、大丈夫ですよ。',ok:false}],
+     why:'まず相手の懸念を問いで引き出す。良質な傾聴は相手の自己洞察を促し、関係を築く。断定（Tell）は知識の呪い由来の押し付けになりやすい。',src:'Schein 2013 / Kluger & Itzchakov 2022'},
+    {s:'年上の専門家が長年のやり方を熱く語る。あなたは新しい知見を持っている。',
+     o:[{t:'すぐ「実は最新研究では違います」と訂正する。',ok:false},
+        {t:'最後まで聞き、要約して返してから「一つ伺っても?」と問う。',ok:true},
+        {t:'黙って聞き流す。',ok:false}],
+     why:'逆メンタリングは相互尊重が前提。まず傾聴し要約で受け止めると、相手の態度がやわらかく明確になり、その後の提案も通りやすい。',src:'Murphy 2012 / Itzchakov et al. 2018'},
+    {s:'メンティ（年上）が良い判断をした。励ましたい。',
+     o:[{t:'さすが、天才ですね！',ok:false},
+        {t:'その判断、どう考えてそこに辿り着いたんですか?',ok:true},
+        {t:'特に何も言わない。',ok:false}],
+     why:'能力称賛は失敗後の粘りを下げ、格上には空虚に響く。プロセスを問う形で承認すると、動機が保たれ関係も深まる。',src:'Mueller & Dweck 1998'},
+    {s:'1on1で、相手が問いのあとに黙り込んだ。',
+     o:[{t:'すぐ次の質問やアドバイスで間を埋める。',ok:false},
+        {t:'3秒待つ。',ok:true},
+        {t:'「分からないですよね」と先回りする。',ok:false}],
+     why:'沈黙は相手が考える時間。良質な傾聴は「待つ」ことを含み、話し手の思考を深める。',src:'Kluger & Itzchakov 2022'},
+    {s:'相手の決断を後押ししたい。',
+     o:[{t:'「私ならこうします」と自分の答えを言う。',ok:false},
+        {t:'「どの選択肢に惹かれてますか? 決め手は?」と問う。',ok:true},
+        {t:'「上司に聞いてみては」と振る。',ok:false}],
+     why:'決定権を相手に残すと自律性が満たされ、内発的なやる気が高まる。代わりに決めると動機は外発化する。',src:'Ryan & Deci 2000'},
+    {s:'年上の暗黙知を、面白い形で言語化してもらいたい。',
+     o:[{t:'「普通はこうですよね」と一般論で受ける。',ok:false},
+        {t:'「もしこれを新人に説明するなら、どう言いますか?」',ok:true},
+        {t:'「マニュアル通りでお願いします」',ok:false}],
+     why:'熟達者は暗黙知を言語化しにくい（知識の呪い）。「新人に説明するなら」という視点が言語化を促し、本人の理解も深まる。',src:'Camerer et al. 1989'},
+    {s:'質問を重ねて、相手に気持ちよく話してもらいたい。',
+     o:[{t:'最初の質問のあとは、自分の意見を中心に話す。',ok:false},
+        {t:'相手の答えに、追加質問を重ねていく。',ok:true},
+        {t:'質問は一度だけにして、あとは黙る。',ok:false}],
+     why:'追加質問は応答性（理解・配慮）を伝え、相手の好感を高める。質問の量より「フォローアップ」が効く。',src:'Huang et al. 2017'}
+  ];
+  var quizList=document.getElementById('quizList'),answered=0,score=0;
+  document.getElementById('qTotal').textContent=Q.length;
+  function buildQuiz(){
+    quizList.innerHTML='';answered=0;score=0;
+    document.getElementById('qScore').textContent='0';
+    document.getElementById('qResult').classList.remove('on');
+    Q.forEach(function(q,i){
+      var card=document.createElement('div');card.className='qcard';
+      var scene=document.createElement('div');scene.className='qscene';
+      scene.innerHTML='<span class="qn">Q'+(i+1)+'</span>'+q.s;
+      var opts=document.createElement('div');opts.className='qopts';
+      var exp=document.createElement('div');exp.className='qexp';
+      exp.innerHTML='<div class="h">解説</div>'+q.why+' <span class="src-badge">'+q.src+'</span>';
+      q.o.forEach(function(op,j){
+        var b=document.createElement('button');b.className='qopt';
+        b.innerHTML='<span class="mk">'+'ABC'[j]+'</span>'+op.t;
+        b.addEventListener('click',function(){
+          if(card.dataset.done)return;card.dataset.done='1';answered++;
+          [].slice.call(opts.children).forEach(function(c,k){
+            c.disabled=true;
+            if(q.o[k].ok)c.classList.add('correct');
+          });
+          if(op.ok){b.classList.add('correct');score++;}
+          else{b.classList.add('wrong');}
+          document.getElementById('qScore').textContent=score;
+          exp.classList.add('on');
+          if(answered===Q.length){
+            var r=document.getElementById('qResult');r.classList.add('on');
+            document.getElementById('qBig').textContent=score+'/'+Q.length;
+            var msg = score===Q.length ? '満点！聞く・問う・承認・自律支援が体に入っています。'
+              : score>=Math.ceil(Q.length*0.7) ? 'good。迷った問題は解説の根拠論文を読み返すとさらに固まります。'
+              : '解説を読み直して、フレーズ集（01）と往復してみてください。';
+            document.getElementById('qMsg').textContent=msg;
+            r.scrollIntoView({behavior:'smooth',block:'nearest'});
+          }
+        });
+        opts.appendChild(b);
+      });
+      card.appendChild(scene);card.appendChild(opts);card.appendChild(exp);quizList.appendChild(card);
+    });
+  }
+  document.getElementById('qReset').addEventListener('click',buildQuiz);
+  buildQuiz();
+
+})();
+</script>
+</body>
+</html>
